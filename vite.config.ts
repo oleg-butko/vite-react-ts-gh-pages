@@ -1,8 +1,15 @@
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react'
+import tsconfigPaths from 'vite-tsconfig-paths';
 
-// https://vite.dev/config/
 export default defineConfig({
-  base: '/vite-react-ts-gh-pages/',
-  plugins: [react()],
-})
+    plugins: [react(), tsconfigPaths()],
+    base: '/vite-react-ts-gh-pages/',
+    server: {
+      fs: {
+        cachedChecks: false
+      }
+    }
+});
+
+
