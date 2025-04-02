@@ -25,7 +25,10 @@ export function InputWithButton(props: Props) {
 			value={value}
 			onChange={(event) => setValue(event.target.value)}
 			rightSection={
-				<ActionIcon size={32} radius='xl' color={theme.primaryColor}>
+				<ActionIcon
+					size='input-sm'
+					radius='xl'
+					color={theme.primaryColor}>
 					<IconArrowRight
 						onClick={() => {
 							props.addTodoCallback(value)

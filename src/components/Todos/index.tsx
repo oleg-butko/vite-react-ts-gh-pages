@@ -1,12 +1,19 @@
 import { useState, useEffect } from 'react'
+import {
+	Checkbox,
+	SegmentedControl,
+	Text,
+	Space,
+	useMantineTheme
+} from '@mantine/core'
 import type { Todo } from '@/types/todo'
-import { Checkbox, SegmentedControl, Text, Space } from '@mantine/core'
 import { Paper, Flex } from '@mantine/core'
 import { InputWithButton } from 'components/InputWithButton'
 
 type Filter = 'All' | 'Active' | 'Completed'
 
 export function Todos({ data }: { data: Todo[] }) {
+	const theme = useMantineTheme()
 	const [todosList, setTodosList] = useState(data)
 	const [filter, setFilter] = useState<Filter>('All')
 	const [visibleTodos, setVisibleTodos] = useState(todosList)
@@ -85,7 +92,11 @@ export function Todos({ data }: { data: Todo[] }) {
 						onChange={(val) => {
 							setFilter(val as Filter)
 						}}
+						withItemsBorders={false}
+						bg={'#ddd'}
+						color={theme.colors.cyan[5]}
 						size='sm'
+						// size='input-sm'
 						data={['All', 'Active', 'Completed']}
 					/>
 				</Flex>
