@@ -14,7 +14,7 @@ const DATA: Todo[] = [
 function App() {
 	return (
 		<MantineProvider>
-			<h1>TODOs</h1>
+			<h3>TODOs</h3>
 			<Todos data={DATA} />
 		</MantineProvider>
 	)
