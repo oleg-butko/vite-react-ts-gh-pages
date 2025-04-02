@@ -10,4 +10,5 @@
   - Mantine InputWithButton
 - Basic static list of todos (InputWithButton + checkboxes)
 - Adding new items with a click or Enter
+- Add filter for 'All', 'Active', 'Completed'
 

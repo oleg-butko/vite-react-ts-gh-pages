@@ -1,16 +1,35 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import type { Todo } from '@/types/todo'
-import { Checkbox } from '@mantine/core'
+import { Checkbox, SegmentedControl, Text, Space } from '@mantine/core'
+import { Paper, Flex } from '@mantine/core'
 import { InputWithButton } from 'components/InputWithButton'
+
+type Filter = 'All' | 'Active' | 'Completed'
 
 export function Todos({ data }: { data: Todo[] }) {
 	const [todosList, setTodosList] = useState(data)
+	const [filter, setFilter] = useState<Filter>('All')
+	const [visibleTodos, setVisibleTodos] = useState(todosList)
+	const notCompletedNum = todosList.filter((todo) => !todo.completed).length
+
+	useEffect(() => {
+		setVisibleTodos(
+			todosList.filter((todo) => {
+				if (filter === 'Completed') {
+					return todo.completed
+				} else if (filter === 'Active') {
+					return !todo.completed
+				} else {
+					return todo
+				}
+			})
+		)
+	}, [todosList, filter])
 
 	const addTodo = (text: string) => {
 		if (text === '') {
 			text = 'пустая тудушка'
 		}
-		// console.log('todosList.length:', todosList.length)
 		const newTodo = {
 			id: `todo-${todosList.length + 1}`,
 			text,
@@ -34,9 +53,12 @@ export function Todos({ data }: { data: Todo[] }) {
 		<>
 			<InputWithButton addTodoCallback={addTodo} />
 
-			{todosList.map((todo: Todo) => (
+			<Space h='md' />
+
+			{visibleTodos.map((todo: Todo) => (
 				<Checkbox
 					style={{ marginLeft: '10px', marginTop: '4px' }}
+					size='lg'
 					radius='xl'
 					id={todo.id}
 					key={todo.id}
@@ -47,6 +69,27 @@ export function Todos({ data }: { data: Todo[] }) {
 					}
 				/>
 			))}
+			<Space h='md' />
+			<Paper withBorder pl='sm' pr='sm'>
+				<Flex gap='md' justify='center' align='center' direction='row'>
+					<Text
+						fz='lg'
+						fw={400}
+						style={{
+							verticalAlign: 'center',
+							alignItems: 'center'
+						}}>
+						{`${notCompletedNum} item(s) left`}
+					</Text>
+					<SegmentedControl
+						onChange={(val) => {
+							setFilter(val as Filter)
+						}}
+						size='sm'
+						data={['All', 'Active', 'Completed']}
+					/>
+				</Flex>
+			</Paper>
 		</>
 	)
 }
