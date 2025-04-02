@@ -8,4 +8,5 @@
   - `npm i --save-dev postcss postcss-preset-mantine postcss-simple-vars`
   - `npm i @tabler/icons-react`
   - Mantine InputWithButton
+- Basic static list of todos (InputWithButton + checkboxes)
 
