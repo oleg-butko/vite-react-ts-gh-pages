@@ -28,15 +28,12 @@ export function InputWithButton(props: Props) {
 				<ActionIcon
 					size='input-sm'
 					radius='xl'
+					onClick={() => {
+						props.addTodoCallback(value)
+						setValue('')
+					}}
 					color={theme.primaryColor}>
-					<IconArrowRight
-						onClick={() => {
-							props.addTodoCallback(value)
-							setValue('')
-						}}
-						size={18}
-						stroke={1.5}
-					/>
+					<IconArrowRight size={18} stroke={1.5} />
 				</ActionIcon>
 			}
 		/>
