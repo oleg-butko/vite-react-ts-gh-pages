@@ -8,7 +8,7 @@ import {
 } from '@mantine/core'
 import type { Todo } from '@/types/todo'
 import { Paper, Flex } from '@mantine/core'
-import { InputWithButton } from 'components/InputWithButton'
+import { InputWithButton } from '@/components/InputWithButton'
 
 type Filter = 'All' | 'Active' | 'Completed'
 

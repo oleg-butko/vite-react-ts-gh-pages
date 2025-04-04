@@ -21,10 +21,12 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
+    /* ... */
+    "esModuleInterop": true,
+    /* ... */
     "paths": {
-      "@/*": ["./src/*"],
-      "components/*": ["./src/components/*"]
+      "@/*": ["./src/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "./jest.setup.ts"]
 }
