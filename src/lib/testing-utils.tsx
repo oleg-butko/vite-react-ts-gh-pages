@@ -17,3 +17,13 @@ export function render(ui: React.ReactNode) {
 }
 export * from '@testing-library/react' // eslint-disable-line
 export { userEvent }
+
+// eslint-disable-next-line
+export function mockFetch(data: any) {
+  return jest.fn().mockImplementation(() =>
+    Promise.resolve({
+      ok: true,
+      json: () => data
+    })
+  )
+}

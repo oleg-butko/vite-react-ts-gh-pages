@@ -16,4 +16,5 @@
   - `npm i -D identity-obj-proxy jest-transformer-svg vite-tsconfig-paths`
 - Add [jsonplaceholder)](https://jsonplaceholder.typicode.com/todos) data source
 - Move jsonplaceholder data loading into Todos component
+- Fix test using mockFetch
 
