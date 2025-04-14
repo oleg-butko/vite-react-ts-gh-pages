@@ -14,4 +14,5 @@
 - Add a test (components/Todos/index.spec.tsx)
   - `npm i -D jest @testing-library/react ts-jest @types/jest ts-node @testing-library/jest-dom jest-environment-jsdom @testing-library/user-event`
   - `npm i -D identity-obj-proxy jest-transformer-svg vite-tsconfig-paths`
+- Add [jsonplaceholder)](https://jsonplaceholder.typicode.com/todos) data source
 
