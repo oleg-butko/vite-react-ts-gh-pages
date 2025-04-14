@@ -30,7 +30,8 @@ export function Todos() {
     apiGetAllTodos()
       .then(res => {
         const newData: Todo[] = []
-        for (let i = 0; i < Math.min(res.length, HOW_MANY_TODOS_GET_MAX); i++) {
+        const iMax = res.length > HOW_MANY_TODOS_GET_MAX ? HOW_MANY_TODOS_GET_MAX : res.length
+        for (let i = 0; i < iMax; i++) {
           newData.push({
             id: `todo-${res[i].id}`,
             text: res[i].title,
