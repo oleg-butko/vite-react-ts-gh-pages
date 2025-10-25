@@ -20,4 +20,6 @@
 - Add tabs: 
   - tab1 will be "auto refresh + click test"
   - tab2 is the Todos component
+- AutoRefreshAndClickTest component
+- cache the API call using useLocalStorage from `@mantine/hooks`
 
