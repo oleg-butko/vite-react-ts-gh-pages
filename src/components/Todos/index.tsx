@@ -1,18 +1,17 @@
 import { useState, useEffect } from 'react'
 import { Checkbox, SegmentedControl, Text, Space, useMantineTheme } from '@mantine/core'
-import type { Todo } from '@/types/todo'
+import type { Todo, TodoAPI } from '@/types/todo'
 import { Paper, Flex } from '@mantine/core'
-import { useIsFirstRender } from '@mantine/hooks'
-import { useDidUpdate } from '@mantine/hooks'
-
+import { useIsFirstRender, useLocalStorage } from '@mantine/hooks' // useDidUpdate
 import { InputWithButton } from '@/components/InputWithButton'
 
 type Filter = 'All' | 'Active' | 'Completed'
 
-// TODO maybe make cache for apiGetAllTodos request
+// cache for apiGetAllTodos request
+const LSKEY_JSON_API = 'jsonDataApiCache'
 const DEFAULT_DATA: Todo[] = [
   { id: 'todo-1', text: 'text 1', completed: false },
-  { id: 'todo-2', text: 'text 2', completed: false },
+  { id: 'todo-2', text: 'text 2', completed: true },
   { id: 'todo-3', text: 'text 3', completed: false }
 ]
 const HOW_MANY_TODOS_GET_MAX = 10
@@ -22,17 +21,36 @@ async function apiGetAllTodos() {
 }
 
 export function Todos() {
+  const [jsonDataLS, setJsonDataLS] = useLocalStorage<TodoAPI[]>({
+    key: LSKEY_JSON_API,
+    getInitialValueInEffect: false
+  })
+  const [todosList, setTodosList] = useState<Todo[]>(DEFAULT_DATA)
   const theme = useMantineTheme()
   const [loading, setLoading] = useState<boolean>(true)
   const [loadedOnce, setLoadedOnce] = useState<boolean>(false)
-  const [todosList, setTodosList] = useState(DEFAULT_DATA)
   const [filter, setFilter] = useState<Filter>('All')
   const [visibleTodos, setVisibleTodos] = useState(todosList)
   const notCompletedNum = todosList.filter(todo => !todo.completed).length
   const firstRender = useIsFirstRender()
-  console.log(`loadedOnce: ${loadedOnce}` + (firstRender ? `  firstRender: ${firstRender}` : ''))
-  useDidUpdate(() => {
-    // Will not be called when mounted"),
+
+  const prepareTodos = (data: TodoAPI[]): Todo[] => {
+    const newData: Todo[] = []
+    const dataTodos = data as TodoAPI[]
+    const iMax =
+      dataTodos.length > HOW_MANY_TODOS_GET_MAX ? HOW_MANY_TODOS_GET_MAX : dataTodos.length
+    for (let i = 0; i < iMax; i++) {
+      newData.push({
+        id: `todo-${dataTodos[i].id}`,
+        text: dataTodos[i].title,
+        completed: dataTodos[i].completed
+      })
+    }
+    return newData
+  }
+
+  // useDidUpdate(() => { // Will not be called when mounted
+  useEffect(() => {
     setVisibleTodos(
       todosList.filter(todo => {
         if (filter === 'Completed') {
@@ -47,25 +65,19 @@ export function Todos() {
   }, [todosList, filter])
 
   useEffect(() => {
-    // console.log(`useEffect> loadedOnce: ${loadedOnce}  firstRender: ${firstRender}`)
-    if (!loadedOnce) {
+    if (jsonDataLS) {
+      setTodosList(prepareTodos(jsonDataLS))
+      setLoading(false)
+    } else if (!loadedOnce) {
       apiGetAllTodos()
         .then(res => {
-          const newData: Todo[] = []
-          const iMax = res.length > HOW_MANY_TODOS_GET_MAX ? HOW_MANY_TODOS_GET_MAX : res.length
-          for (let i = 0; i < iMax; i++) {
-            newData.push({
-              id: `todo-${res[i].id}`,
-              text: res[i].title,
-              completed: res[i].completed
-            })
-          }
+          setJsonDataLS(res)
+          setTodosList(prepareTodos(res))
           setLoadedOnce(true)
-          setTodosList(newData)
         })
         .finally(() => setLoading(false))
     }
-  }, [firstRender, loadedOnce])
+  }, [firstRender, loadedOnce, setJsonDataLS, jsonDataLS])
 
   const addTodo = (text: string) => {
     if (text === '') {

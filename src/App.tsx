@@ -1,8 +1,7 @@
 import { MantineProvider, Tabs, Container, Center } from '@mantine/core'
-
-import { Text } from '@mantine/core'
 import { useViewportSize } from '@mantine/hooks'
 import { Todos } from '@/components/Todos'
+import { AutoRefreshAndClickTest } from '@/components/AutoRefreshAndClickTest'
 // styles
 import '@mantine/core/styles.css'
 import classes from './App.module.css'
@@ -18,13 +17,9 @@ function App() {
               <Tabs.Tab value="refresh"> Test: (Auto refresh) + (Auto click)</Tabs.Tab>
               <Tabs.Tab value="todos">Todo(s)</Tabs.Tab>
             </Tabs.List>
-
             <Tabs.Panel value="refresh" pt="md">
-              <Text size="sm" fw={500}>
-                tab 1
-              </Text>
+              <AutoRefreshAndClickTest />
             </Tabs.Panel>
-
             <Tabs.Panel value="todos" pt="md">
               <Todos />
             </Tabs.Panel>
