@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react'
 import { Checkbox, SegmentedControl, Text, Space, useMantineTheme } from '@mantine/core'
 import type { Todo } from '@/types/todo'
 import { Paper, Flex } from '@mantine/core'
+import { useIsFirstRender } from '@mantine/hooks'
+import { useDidUpdate } from '@mantine/hooks'
+
 import { InputWithButton } from '@/components/InputWithButton'
 
 type Filter = 'All' | 'Active' | 'Completed'
@@ -21,29 +24,15 @@ async function apiGetAllTodos() {
 export function Todos() {
   const theme = useMantineTheme()
   const [loading, setLoading] = useState<boolean>(true)
+  const [loadedOnce, setLoadedOnce] = useState<boolean>(false)
   const [todosList, setTodosList] = useState(DEFAULT_DATA)
   const [filter, setFilter] = useState<Filter>('All')
   const [visibleTodos, setVisibleTodos] = useState(todosList)
   const notCompletedNum = todosList.filter(todo => !todo.completed).length
-
-  useEffect(() => {
-    apiGetAllTodos()
-      .then(res => {
-        const newData: Todo[] = []
-        const iMax = res.length > HOW_MANY_TODOS_GET_MAX ? HOW_MANY_TODOS_GET_MAX : res.length
-        for (let i = 0; i < iMax; i++) {
-          newData.push({
-            id: `todo-${res[i].id}`,
-            text: res[i].title,
-            completed: res[i].completed
-          })
-        }
-        setTodosList(newData)
-      })
-      .finally(() => setLoading(false))
-  }, [])
-
-  useEffect(() => {
+  const firstRender = useIsFirstRender()
+  console.log(`loadedOnce: ${loadedOnce}` + (firstRender ? `  firstRender: ${firstRender}` : ''))
+  useDidUpdate(() => {
+    // Will not be called when mounted"),
     setVisibleTodos(
       todosList.filter(todo => {
         if (filter === 'Completed') {
@@ -56,6 +45,27 @@ export function Todos() {
       })
     )
   }, [todosList, filter])
+
+  useEffect(() => {
+    // console.log(`useEffect> loadedOnce: ${loadedOnce}  firstRender: ${firstRender}`)
+    if (!loadedOnce) {
+      apiGetAllTodos()
+        .then(res => {
+          const newData: Todo[] = []
+          const iMax = res.length > HOW_MANY_TODOS_GET_MAX ? HOW_MANY_TODOS_GET_MAX : res.length
+          for (let i = 0; i < iMax; i++) {
+            newData.push({
+              id: `todo-${res[i].id}`,
+              text: res[i].title,
+              completed: res[i].completed
+            })
+          }
+          setLoadedOnce(true)
+          setTodosList(newData)
+        })
+        .finally(() => setLoading(false))
+    }
+  }, [firstRender, loadedOnce])
 
   const addTodo = (text: string) => {
     if (text === '') {
