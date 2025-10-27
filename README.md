@@ -21,5 +21,6 @@
   - tab1 will be "auto refresh + click test"
   - tab2 is the Todos component
 - AutoRefreshAndClickTest component
-- cache the API call using useLocalStorage from `@mantine/hooks`
+- Cache the API call using useLocalStorage from `@mantine/hooks`
+- Add second text + button, add button's styles `.button_1` `.button_2`
 

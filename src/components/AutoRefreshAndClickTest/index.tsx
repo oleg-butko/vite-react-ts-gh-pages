@@ -16,7 +16,7 @@ export function AutoRefreshAndClickTest() {
   const [clickCount2, setClickCount2] = useState(0)
 
   useEffect(() => {
-    console.log('useEffect1, secondsLeft:', secondsLeft, 'initialSeconds:', initialSeconds)
+    // console.log('useEffect1, secondsLeft:', secondsLeft, 'initialSeconds:', initialSeconds)
     if (secondsLeft === '-' && initialSeconds) {
       setSecondsLeft(initialSeconds)
     }
@@ -27,7 +27,7 @@ export function AutoRefreshAndClickTest() {
   }, [initialSeconds, setInitialSeconds, secondsLeft])
 
   useEffect(() => {
-    console.log('useEffect2, secondsLeft:', secondsLeft)
+    // console.log('useEffect2, secondsLeft:', secondsLeft)
     if (secondsLeft === '-') {
       return
     }
