@@ -1,13 +1,7 @@
-// import { useState, useEffect } from 'react'
-// import { Checkbox, SegmentedControl, Text, Space, useMantineTheme } from '@mantine/core'
-// import type { Todo } from '@/types/todo'
-// import { Paper, Flex } from '@mantine/core'
-// import { useIsFirstRender } from '@mantine/hooks'
-// import { useDidUpdate } from '@mantine/hooks'
-
 import { useState, useEffect } from 'react'
 import { NumberInput, Text, Button, Group, Stack } from '@mantine/core'
 import { useLocalStorage, readLocalStorageValue } from '@mantine/hooks'
+import classes from './index.module.css'
 
 const LSKEY_INITIAL_SECONDS = 'initialSeconds'
 let initialSecondsOnLoad = readLocalStorageValue({ key: LSKEY_INITIAL_SECONDS })
@@ -18,7 +12,8 @@ export function AutoRefreshAndClickTest() {
   })
   const [secondsLeft, setSecondsLeft] = useState('-')
   const [showElements, setShowElements] = useState(false)
-  const [clickCount, setClickCount] = useState(0)
+  const [clickCount1, setClickCount1] = useState(0)
+  const [clickCount2, setClickCount2] = useState(0)
 
   useEffect(() => {
     console.log('useEffect1, secondsLeft:', secondsLeft, 'initialSeconds:', initialSeconds)
@@ -53,8 +48,11 @@ export function AutoRefreshAndClickTest() {
     return () => clearInterval(timer)
   }, [secondsLeft])
 
-  const handleButtonClick = () => {
-    setClickCount(prev => prev + 1)
+  const handleButton1Click = () => {
+    setClickCount1(prev => prev + 1)
+  }
+  const handleButton2Click = () => {
+    setClickCount2(prev => prev + 1)
   }
 
   return (
@@ -71,14 +69,33 @@ export function AutoRefreshAndClickTest() {
         <Text style={{ alignSelf: 'flex-end', marginBottom: 5 }}>Remaining: {secondsLeft}</Text>
       </Group>
 
-      {showElements && <Text size="lg">Text shown after delay</Text>}
+      <Group>
+        {showElements && <Text size="sm">Text1 shown after delay</Text>}
+        <Text className={showElements ? classes.visible : classes.hidden} size="sm">
+          Text2 visible after delay
+        </Text>
+      </Group>
 
       {showElements && (
-        <Group>
-          <Button onClick={handleButtonClick} variant="filled" color="teal">
-            Button to click
+        <Group gap={'20px'}>
+          <Button
+            className={'button_1'}
+            onClick={handleButton1Click}
+            variant="filled"
+            color="teal"
+          >
+            Button_1 to click
           </Button>
-          <Text>Clicked: {clickCount}</Text>
+          <Text className={'text_1'}>Clicked: {clickCount1}</Text>
+          <Button
+            className={'button_2'}
+            onClick={handleButton2Click}
+            variant="filled"
+            color="indigo"
+          >
+            Button_2 to click
+          </Button>
+          <Text className={'text_2'}>Clicked: {clickCount2}</Text>
         </Group>
       )}
     </Stack>

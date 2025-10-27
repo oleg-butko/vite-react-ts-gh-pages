@@ -1,0 +1,17 @@
+
+.visible {
+  visibility: visible;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+
+
+.test {
+  & :global(.global-class-name) {
+    color: red;
+  }
+}
+
